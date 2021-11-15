@@ -1,0 +1,24 @@
+Bootstrap: docker
+From: taniguti/fungap-base:v1.1.0
+
+%environment
+	export FUNGAP_DIR=/workspace/FunGAP	
+
+%files
+
+
+%post
+  apt-get install git
+	cd /workspace/FunGAP/
+	git clone https://github.com/sarangian/genmark.git
+	cd genmark
+	tar -xvzf gmes_linux_64.tar.gz
+	mv gmes_linux_64 /workspace/FunGAP/external/
+	cp gm_key_64 ~/.gm_key
+	cp fungap.conf /workspace/FunGAP/
+	cd ..
+	rm -rf genmark
+
+	cd /workspace/FunGAP/gmes_linux_64/ 
+	cp other/reformat_fasta.pl .
+	perl change_path_in_perl_scripts.pl "/usr/bin/env perl"
